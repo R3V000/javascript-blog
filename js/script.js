@@ -218,7 +218,7 @@ function tagClickHandler(event) {
 
 function addClickListenersToTags() {
   /* find all links to tags */
-  const links = document.querySelectorAll(".post-tags a");
+  const links = document.querySelectorAll('[href^="#tag-"]');
   /* START LOOP: for each link */
   for (let link of links) {
     /* add tagClickHandler as event listener for that link */
@@ -242,22 +242,23 @@ function generateAuthors() {
     authorWrapper.innerHTML = "";
 
     let html = "";
-    const authors = article.getAttribute("data-author").split(" ");
+    const authors = article.getAttribute("data-author");
     console.log(authors);
 
-    for (let author of authors) {
-      const linkHTML = '<a href="#author-' + author + '">' + author + "</a> ";
-      console.log(linkHTML);
-      html = html + linkHTML;
-      console.log(html);
-      if (!allAuthors[author]) {
-        allAuthors[author] = 1;
-      } else {
-        allAuthors[author]++;
-      }
-    }
+    const linkHTML = '<a href="#author-' + authors + '">' + authors + "</a> ";
+    console.log(linkHTML);
+    html = html + linkHTML;
     authorWrapper.innerHTML = html;
+
+    if (!allAuthors[authors]) {
+      allAuthors[authors] = 1;
+    } else {
+      allAuthors[authors]++;
+    }
   }
+  console.log("autorzysa");
+  console.log(allAuthors);
+
   const authorList = document.querySelector(optAuthorsListSelector);
   const authorParams = calculateTagsParams(allAuthors);
   let allAuthorsHTML = "";
@@ -296,11 +297,12 @@ function authorClickHandler(event) {
   for (let foundAuthor of authorHrefLinks) {
     foundAuthor.classList.add("active");
   }
-  generateTitleLinks('[data-author~="' + author + '"]');
+  generateTitleLinks('[data-author="' + author + '"]');
 }
 
 function addClickListenersToAuthors() {
-  const links = document.querySelectorAll(".post-author a");
+  const links = document.querySelectorAll('[href^="#author-"]');
+  //console.log(links);
   for (let link of links) {
     link.addEventListener("click", authorClickHandler);
     console.log(link);
